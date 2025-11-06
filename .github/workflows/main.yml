@@ -1,0 +1,26 @@
+name: macOS Self-hosted GUI Runner + Tailscale + noVNC
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  setup:
+    runs-on: [self-hosted, macOS]
+    env:
+      # Put a short-lived Tailscale auth key in repo secrets and reference it here
+      TAILSCALE_AUTHKEY: ${{ secrets.TAILSCALE_AUTHKEY }}
+      VNC_PASSWORD: ${{ secrets.VNC_PASSWORD || 'runner' }}
+      TAILSCALE_HOSTNAME: macos-novnc-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Upload script to runner
+        run: |
+          chmod +x ./setup-macos-tailscale-novnc.sh
+
+      - name: Run macOS setup script (must run on your self-hosted Mac)
+        # run with sudo because the script performs system installs/enables
+        run: sudo ./setup-macos-tailscale-novnc.sh
