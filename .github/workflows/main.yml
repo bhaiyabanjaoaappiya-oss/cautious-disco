@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   setup:
-    runs-on: [self-hosted, macOS]
+    runs-on: macOS-latest
     env:
       # Put a short-lived Tailscale auth key in repo secrets and reference it here
       TAILSCALE_AUTHKEY: ${{ secrets.TAILSCALE_AUTHKEY }}
